@@ -12,8 +12,8 @@ public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
     {
         if (radius <= 0)
             throw new ArgumentException("radius must be greater than 0", nameof(radius));
-        if (angleOffset <= 0)
-            throw new ArgumentException("angleOffset must be greater than 0", nameof(angleOffset));
+        if (angleOffset == 0)
+            throw new ArgumentException("angleOffset must not be 0", nameof(angleOffset));
         
         offsetPerRadian = radius / (2 * Math.PI);
         this.angleOffset = angleOffset * Math.PI / 180;
