@@ -11,17 +11,12 @@ public class CircularCloudLayouter : ICloudLayouter
     public CircularCloudLayouter(Point center)
     {
         this.center = center;
-        var pointsGenerator = new ArchimedeanSpiralPointsGenerator(1, 0.5);
+        var pointsGenerator = new ArchimedeanSpiralPointsGenerator(2, 0.5);
         points = pointsGenerator.GeneratePoints(center).GetEnumerator();
     }
 
     public Rectangle PutNextRectangle(Size rectangleSize)
     {
-        if (rectangles.Count == 0)
-        {
-            return CreateRectangleWithCenter(center, rectangleSize);
-        }
-
         Rectangle rectangle;
         do
         {
@@ -29,6 +24,7 @@ public class CircularCloudLayouter : ICloudLayouter
             var rectanglePos = points.Current;
             rectangle = CreateRectangleWithCenter(rectanglePos, rectangleSize);
         } while (rectangles.Any(rectangle.IntersectsWith));
+        rectangles.Add(rectangle);
         
         return rectangle;
     }
