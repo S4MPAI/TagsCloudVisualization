@@ -8,8 +8,8 @@ namespace TagsCloudVisualizationTests;
 [TestFixture]
 public class ArchimedeanSpiralPointsGeneratorTests
 {
-    [TestCase(-1, 2)]
-    [TestCase(4, -2)]
+    [TestCase(-1, 2, TestName = "IfRadiusLessThanZero")]
+    [TestCase(4, 0, TestName = "IfAngleOffsetEqualZero")]
     public void ShouldThrowArgumentException(double radius, double angleOffset)
     {
         var pointsGeneratorConstructor = () => new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
