@@ -8,11 +8,11 @@ namespace TagsCloudVisualization;
 
 public static class Program
 {
-    public const int ImageWidth = 1920;
-    public const int ImageHeight = 1080;
-    public const int CountRectangles = 100;
-    public const int minLength = 30;
-    public const int maxLength = 50;
+    public const int ImageWidth = 1600;
+    public const int ImageHeight = 1600;
+    public const int CountRectangles = 1000;
+    public const int minLength = 10;
+    public const int maxLength = 20;
     
     public static void Main()
     {
@@ -36,7 +36,7 @@ public static class Program
 
     private static string GetPathToTagsCloudImage()
     {
-        var fileName = $"{CountRectangles}TagsCloud.png";
+        var fileName = $"{CountRectangles}_{minLength}_{maxLength}_TagsCloud.png";
         var imagesDirectory = "images";
         Directory.CreateDirectory(imagesDirectory);
         
