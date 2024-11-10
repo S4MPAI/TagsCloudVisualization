@@ -25,13 +25,18 @@ public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
         
         while (true)
         {
-            var p = offsetPerRadian * angle;
-            var x = (int)Math.Round(startPoint.X + p * Math.Cos(angle));
-            var y = (int)Math.Round(startPoint.Y + p * Math.Sin(angle));
-            
-            yield return new Point(x, y);
+            yield return ConvertFromPolarCoordinates(startPoint, angle);
             
             angle += angleOffset;
         }
+    }
+
+    private Point ConvertFromPolarCoordinates(Point startPoint, double angle)
+    {
+        var p = offsetPerRadian * angle;
+        var x = (int)Math.Round(startPoint.X + p * Math.Cos(angle));
+        var y = (int)Math.Round(startPoint.Y + p * Math.Sin(angle));
+        
+        return new Point(x, y);
     }
 }
