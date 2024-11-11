@@ -33,5 +33,6 @@ public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
             
             radiansAngle += radiansAngleOffset;
         }
+        // ReSharper disable once IteratorNeverReturns
     }
 }
