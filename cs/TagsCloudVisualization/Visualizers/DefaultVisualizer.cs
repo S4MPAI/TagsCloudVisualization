@@ -13,13 +13,10 @@ public class DefaultVisualizer : IVisualizer
     public Bitmap CreateBitmap(IEnumerable<Rectangle> rectangles, Size bitmapSize)
     {
         var bitmap = new Bitmap(bitmapSize.Width, bitmapSize.Height);
-        var graphics = Graphics.FromImage(bitmap);
+        using var graphics = Graphics.FromImage(bitmap);
         
         foreach (var rectangle in rectangles)
-        {
-            var pen = GetRandomPen();
-            graphics.DrawRectangle(pen, rectangle);
-        }
+            graphics.DrawRectangle(GetRandomPen(), rectangle);
         
         return bitmap;
     }
