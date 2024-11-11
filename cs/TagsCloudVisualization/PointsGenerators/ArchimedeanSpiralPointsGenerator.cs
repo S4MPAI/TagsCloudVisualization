@@ -11,9 +11,9 @@ public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
     public ArchimedeanSpiralPointsGenerator(double radius, double angleOffset)
     {
         if (radius <= 0)
-            throw new ArgumentException("radius must be greater than 0", nameof(radius));
+            throw new ArgumentException($"{nameof(radius)} must be greater than 0");
         if (angleOffset == 0)
-            throw new ArgumentException("angleOffset must not be 0", nameof(angleOffset));
+            throw new ArgumentException($"{nameof(angleOffset)} must not be 0");
         
         offsetPerRadian = PolarMath.GetOffsetPerRadianForArchimedeanSpiral(radius);
         radiansAngleOffset = PolarMath.ConvertToRadians(angleOffset);
