@@ -1,7 +1,9 @@
 using System.Drawing;
+using System.Runtime.Versioning;
 
 namespace TagsCloudVisualization.Visualizers;
 
+[SupportedOSPlatform("windows")]
 public class DefaultVisualizer : IVisualizer
 {
     private const int MinColorComponentValue = 0;

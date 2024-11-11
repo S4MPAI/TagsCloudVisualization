@@ -1,10 +1,12 @@
 using System.Drawing;
+using System.Runtime.Versioning;
 using TagsCloudVisualization.CloudLayouters;
 using TagsCloudVisualization.Extensions;
 using TagsCloudVisualization.Visualizers;
 
 namespace TagsCloudVisualization;
 
+[SupportedOSPlatform("windows")]
 public static class Program
 {
     public const int ImageWidth = 1600;
