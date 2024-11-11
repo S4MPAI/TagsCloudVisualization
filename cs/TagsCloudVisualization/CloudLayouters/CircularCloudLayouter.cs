@@ -1,4 +1,5 @@
 using System.Drawing;
+using TagsCloudVisualization.PointsGenerators;
 
 namespace TagsCloudVisualization.CloudLayouters;
 

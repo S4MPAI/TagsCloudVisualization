@@ -1,7 +1,6 @@
 using System.Drawing;
-using TagsCloudVisualization.PointsGenerators;
 
-namespace TagsCloudVisualization;
+namespace TagsCloudVisualization.PointsGenerators;
 
 public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
 {
