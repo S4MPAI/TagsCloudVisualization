@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Drawing.Imaging;
 using TagsCloudVisualization.CloudLayouters;
 using TagsCloudVisualization.Extensions;
 using TagsCloudVisualization.Visualizers;
@@ -17,7 +16,7 @@ public static class Program
     public static void Main()
     {
         var center = new Point(ImageWidth / 2, ImageHeight / 2);
-        var cloudLayouter = new CircularCloudLayouter(center);
+        var cloudLayouter = new CircularCloudLayouter(center, 1, 0.5);
         var random = new Random();
         var rectangles = new Rectangle[CountRectangles];
         
