@@ -46,19 +46,12 @@ public class CircularCloudLayouterTests
         IsHaveIntersects(rectangles).Should().BeFalse();
     }
 
-    private bool IsHaveIntersects(Rectangle[] rectangles)
+    private static bool IsHaveIntersects(Rectangle[] rectangles)
     {
-        for (int i = 0; i < rectangles.Length; i++)
-        {
-            for (int j = 0; j < rectangles.Length; j++)
-            {
-                if (i == j)
-                    continue;
-                
+        for (var i = 0; i < rectangles.Length; i++)
+            for (var j = i + 1; j < rectangles.Length; j++) 
                 if (rectangles[i].IntersectsWith(rectangles[j]))
                     return true;
-            }
-        }
         
         return false;
     }
