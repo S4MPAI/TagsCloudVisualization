@@ -22,15 +22,14 @@ public class DefaultVisualizer : IVisualizer
         return bitmap;
     }
 
-    private Pen GetRandomPen()
-    {
-        var color = Color.FromArgb
-        (
-            random.Next(MinColorComponentValue, MaxColorComponentValue), 
-            random.Next(MinColorComponentValue, MaxColorComponentValue), 
-            random.Next(MinColorComponentValue, MaxColorComponentValue)
+    private Pen GetRandomPen() =>
+        new
+        (Color.FromArgb(
+            GetRandomArgbColorComponent(),
+            GetRandomArgbColorComponent(),
+            GetRandomArgbColorComponent())
         );
-        
-        return new Pen(color);
-    }
+
+    private int GetRandomArgbColorComponent() => 
+        random.Next(MinColorComponentValue, MaxColorComponentValue);
 }
