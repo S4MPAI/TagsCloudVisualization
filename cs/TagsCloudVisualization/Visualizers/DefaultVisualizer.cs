@@ -8,7 +8,7 @@ public class DefaultVisualizer : IVisualizer
     private const int MaxColorComponentValue = 255;
     private readonly Random random = new();
     
-    public Bitmap CreateBitmap(IList<Rectangle> rectangles, Size bitmapSize)
+    public Bitmap CreateBitmap(IEnumerable<Rectangle> rectangles, Size bitmapSize)
     {
         var bitmap = new Bitmap(bitmapSize.Width, bitmapSize.Height);
         var graphics = Graphics.FromImage(bitmap);
