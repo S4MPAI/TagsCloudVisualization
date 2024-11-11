@@ -4,13 +4,13 @@ namespace TagsCloudVisualization.CloudLayouters;
 
 public class CircularCloudLayouter : ICloudLayouter
 {
-    private IEnumerator<Point> points;
-    private List<Rectangle> rectangles = [];
+    private readonly IEnumerator<Point> pointsIterator;
+    private readonly List<Rectangle> rectangles = new();
 
     public CircularCloudLayouter(Point center)
     {
         var pointsGenerator = new ArchimedeanSpiralPointsGenerator(1, 0.5);
-        points = pointsGenerator.GeneratePoints(center).GetEnumerator();
+        pointsIterator = pointsGenerator.GeneratePoints(center).GetEnumerator();
     }
 
     public Rectangle PutNextRectangle(Size rectangleSize)
@@ -18,8 +18,8 @@ public class CircularCloudLayouter : ICloudLayouter
         Rectangle rectangle;
         do
         {
-            points.MoveNext();
-            var rectanglePos = points.Current;
+            pointsIterator.MoveNext();
+            var rectanglePos = pointsIterator.Current;
             rectangle = CreateRectangleWithCenter(rectanglePos, rectangleSize);
         } while (rectangles.Any(rectangle.IntersectsWith));
         
