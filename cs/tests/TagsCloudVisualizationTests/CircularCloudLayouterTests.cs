@@ -20,7 +20,7 @@ public class CircularCloudLayouterTests
     }
     
     [Test]
-    public void PutNextRectangle_Should_ReturnRectangleInCenter_IfIsFirstRectangle()
+    public void PutNextRectangle_ShouldReturnRectangleInCenter_IsFirstRectangle()
     {
         var size = new Size(100, 100);
         var circularCloudLayouter = new CircularCloudLayouter(new Point(0, 0), 1, 0.5);
@@ -33,7 +33,7 @@ public class CircularCloudLayouterTests
 
     [Test]
     [Repeat(10)]
-    public void PutNextRectangle_Should_ReturnDontIntersectsRectangles()
+    public void PutNextRectangle_ShouldReturnDontIntersectsRectangles()
     {
         var rectanglesCount = random.Next(100, 500);
         var circularCloudLayouter = new CircularCloudLayouter(new Point(0, 0), 1, 0.5);

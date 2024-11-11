@@ -8,8 +8,8 @@ namespace TagsCloudVisualizationTests;
 [TestFixture]
 public class ArchimedeanSpiralPointsGeneratorTests
 {
-    [TestCase(-1, 2, TestName = "IfRadiusLessThanZero")]
-    [TestCase(4, 0, TestName = "IfAngleOffsetEqualZero")]
+    [TestCase(-1, 2, TestName = "RadiusLessThanZero")]
+    [TestCase(4, 0, TestName = "AngleOffsetEqualZero")]
     public void ShouldThrowArgumentException(double radius, double angleOffset)
     {
         var pointsGeneratorConstructor = () => new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
@@ -22,19 +22,22 @@ public class ArchimedeanSpiralPointsGeneratorTests
     {
         var pointsGenerator = new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
         
-        var actualPoints = pointsGenerator.GeneratePoints(new Point()).Skip(pointIndex).First();
+        var actualPoint = pointsGenerator
+            .GeneratePoints(new Point())
+            .Skip(pointIndex)
+            .First();
         
-        return actualPoints;
+        return actualPoint;
     }
 
     public static object[] GeneratePointsTestCases =
     {
-        new TestCaseData(3, 360, 0).Returns(new Point(0, 0)).SetName("IfGetFirstPoint"),
-        new TestCaseData(1, 360, 1).Returns(new Point(1, 0)).SetName("IfGetSecondPoint_AndAngleOffsetEqual360"),
-        new TestCaseData(2, 180, 1).Returns(new Point(-1, 0)).SetName("IfGetSecondPoint_AndAngleOffsetEqual180"),
-        new TestCaseData(4, 90, 1).Returns(new Point(0, 1)).SetName("IfGetSecondPoint_AndAngleOffsetEqual90"),
-        new TestCaseData(4, 270, 1).Returns(new Point(0, -3)).SetName("IfGetSecondPoint_AndAngleOffsetEqual270"),
-        new TestCaseData(8, 45, 1).Returns(new Point(1, 1)).SetName("IfGetSecondPoint_AndAngleOffsetEqual45"),
-        new TestCaseData(3, 360, 2).Returns(new Point(6, 0)).SetName("IfGetThirdPoint_AndAngleOffsetEqual360")
+        new TestCaseData(3, 360, 0).Returns(new Point(0, 0)).SetName("GetFirstPoint"),
+        new TestCaseData(1, 360, 1).Returns(new Point(1, 0)).SetName("GetSecondPointAndAngleOffsetEqual360"),
+        new TestCaseData(2, 180, 1).Returns(new Point(-1, 0)).SetName("GetSecondPointAndAngleOffsetEqual180"),
+        new TestCaseData(4, 90, 1).Returns(new Point(0, 1)).SetName("GetSecondPointAndAngleOffsetEqual90"),
+        new TestCaseData(4, 270, 1).Returns(new Point(0, -3)).SetName("GetSecondPointAndAngleOffsetEqual270"),
+        new TestCaseData(8, 45, 1).Returns(new Point(1, 1)).SetName("GetSecondPointAndAngleOffsetEqual45"),
+        new TestCaseData(3, 360, 2).Returns(new Point(6, 0)).SetName("GetThirdPointAndAngleOffsetEqual360")
     };
 }
