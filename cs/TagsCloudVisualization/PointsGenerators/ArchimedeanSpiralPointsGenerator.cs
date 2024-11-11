@@ -1,11 +1,12 @@
 using System.Drawing;
+using TagsCloudVisualization.Base;
 
 namespace TagsCloudVisualization.PointsGenerators;
 
 public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
 {
     private readonly double offsetPerRadian;
-    private readonly double angleOffset;
+    private readonly double radiansAngleOffset;
     
     public ArchimedeanSpiralPointsGenerator(double radius, double angleOffset)
     {
@@ -14,28 +15,23 @@ public class ArchimedeanSpiralPointsGenerator : IPointsGenerator
         if (angleOffset == 0)
             throw new ArgumentException("angleOffset must not be 0", nameof(angleOffset));
         
-        offsetPerRadian = radius / (2 * Math.PI);
-        this.angleOffset = angleOffset * Math.PI / 180;
+        offsetPerRadian = PolarMath.GetOffsetPerRadianForArchimedeanSpiral(radius);
+        radiansAngleOffset = PolarMath.ConvertToRadians(angleOffset);
     }
     
     public IEnumerable<Point> GeneratePoints(Point startPoint)
     {
-        var angle = 0d;
+        var radiansAngle = 0d;
         
         while (true)
         {
-            yield return ConvertFromPolarCoordinates(startPoint, angle);
+            var polarRadius = offsetPerRadian * radiansAngle;
+            var pointOnSpiral = PolarMath.ConvertToCartesianCoordinateSystem(polarRadius, radiansAngle);
+            pointOnSpiral.Offset(startPoint);
             
-            angle += angleOffset;
+            yield return pointOnSpiral;
+            
+            radiansAngle += radiansAngleOffset;
         }
-    }
-
-    private Point ConvertFromPolarCoordinates(Point startPoint, double angle)
-    {
-        var p = offsetPerRadian * angle;
-        var x = (int)Math.Round(startPoint.X + p * Math.Cos(angle));
-        var y = (int)Math.Round(startPoint.Y + p * Math.Sin(angle));
-        
-        return new Point(x, y);
     }
 }
