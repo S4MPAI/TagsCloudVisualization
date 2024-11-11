@@ -7,9 +7,9 @@ public class CircularCloudLayouter : ICloudLayouter
     private readonly IEnumerator<Point> pointsIterator;
     private readonly List<Rectangle> rectangles = new();
 
-    public CircularCloudLayouter(Point center)
+    public CircularCloudLayouter(Point center, double radius, double angleOffset)
     {
-        var pointsGenerator = new ArchimedeanSpiralPointsGenerator(1, 0.5);
+        var pointsGenerator = new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
         pointsIterator = pointsGenerator.GeneratePoints(center).GetEnumerator();
     }
 
@@ -28,7 +28,7 @@ public class CircularCloudLayouter : ICloudLayouter
         return rectangle;
     }
 
-    private Rectangle CreateRectangleWithCenter(Point centerPos, Size rectangleSize)
+    private static Rectangle CreateRectangleWithCenter(Point centerPos, Size rectangleSize)
     {
         var xPos = centerPos.X - rectangleSize.Width / 2;
         var yPos = centerPos.Y - rectangleSize.Height / 2;
