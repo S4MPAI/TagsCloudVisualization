@@ -37,14 +37,11 @@ public class CircularCloudLayouterTests
     {
         var rectanglesCount = random.Next(100, 500);
         var circularCloudLayouter = new CircularCloudLayouter(new Point(0, 0), 1, 0.5);
-        var rectangles = new Rectangle[rectanglesCount];
-        
-        for (int i = 0; i < rectanglesCount; i++)
-        {
-            var size = random.NextSize(10, 50);
-
-            rectangles[i] = circularCloudLayouter.PutNextRectangle(size);
-        }
+        var rectangles = Enumerable
+            .Range(0, rectanglesCount)
+            .Select(_ => random.NextSize(10, 50))
+            .Select(s => circularCloudLayouter.PutNextRectangle(s))
+            .ToArray();
         
         IsHaveIntersects(rectangles).Should().BeFalse();
     }
