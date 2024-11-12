@@ -1,6 +1,7 @@
 using System.Drawing;
 using FluentAssertions;
 using NUnit.Framework;
+using TagsCloudVisualization.Base;
 using TagsCloudVisualization.PointsGenerators;
 
 namespace TagsCloudVisualizationTests;
@@ -17,27 +18,37 @@ public class ArchimedeanSpiralPointsGeneratorTests
         pointsGeneratorConstructor.Should().Throw<ArgumentException>();
     }
     
-    [TestCaseSource(nameof(GeneratePointsTestCases))]
-    public Point GeneratePoints_ShouldReturnExpectedPoint(double radius, double angleOffset, int pointIndex)
+    [TestCase(1, 10)]
+    [TestCase(4, 90)]
+    [TestCase(8, 45)]
+    [TestCase(12, 30)]
+    public void GeneratePoints_ShouldReturnPointsInSpiral(double radius, double angleOffset)
     {
         var pointsGenerator = new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
         
-        var actualPoint = pointsGenerator
+        var actualPoints = pointsGenerator
             .GeneratePoints(new Point())
-            .Skip(pointIndex)
-            .First();
-        
-        return actualPoint;
+            .Take(1000);
+
+        AssertPointsGeneratingInSpiral(radius, angleOffset, actualPoints);
     }
 
-    public static object[] GeneratePointsTestCases =
+    private static void AssertPointsGeneratingInSpiral(double radius, double angleOffset, IEnumerable<Point> actualPoints)
     {
-        new TestCaseData(3, 360, 0).Returns(new Point(0, 0)).SetName("GetFirstPoint"),
-        new TestCaseData(1, 360, 1).Returns(new Point(1, 0)).SetName("GetSecondPointAndAngleOffsetEqual360"),
-        new TestCaseData(2, 180, 1).Returns(new Point(-1, 0)).SetName("GetSecondPointAndAngleOffsetEqual180"),
-        new TestCaseData(4, 90, 1).Returns(new Point(0, 1)).SetName("GetSecondPointAndAngleOffsetEqual90"),
-        new TestCaseData(4, 270, 1).Returns(new Point(0, -3)).SetName("GetSecondPointAndAngleOffsetEqual270"),
-        new TestCaseData(8, 45, 1).Returns(new Point(1, 1)).SetName("GetSecondPointAndAngleOffsetEqual45"),
-        new TestCaseData(3, 360, 2).Returns(new Point(6, 0)).SetName("GetThirdPointAndAngleOffsetEqual360")
-    };
+        var angle = 0d;
+        var angleRadiansOffset = PolarMath.ConvertToRadians(angleOffset);
+        var (_, lastAngle) = PolarMath.ConvertToPolarCoordinateSystem(new Point());
+        
+        foreach (var actualPoint in actualPoints)
+        {
+            var expectedRadius = radius * angle / 360;
+            var (actualRadius, actualAngle) = PolarMath.ConvertToPolarCoordinateSystem(actualPoint);
+            
+            actualRadius.Should().BeApproximately(expectedRadius, 0.99);
+            actualAngle.Should().BeGreaterThanOrEqualTo(lastAngle);
+            
+            lastAngle = actualAngle + angleRadiansOffset >= 2 * Math.PI ? 0 : lastAngle;
+            angle += angleOffset;
+        }
+    }
 }
