@@ -9,6 +9,9 @@ public static class PolarMath
 
     public static double ConvertToDegrees(double radians) =>
         radians * 180 / Math.PI;
+
+    public static double GetSquareOfCircle(double radius) => 
+        Math.PI * radius * radius;
     
     public static double GetOffsetPerRadianForArchimedeanSpiral(double radius) =>
         radius / (2 * Math.PI);
