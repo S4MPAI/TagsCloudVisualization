@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Runtime.Versioning;
+using TagsCloudVisualization.Base;
 using TagsCloudVisualization.CloudLayouters;
 using TagsCloudVisualization.Extensions;
 using TagsCloudVisualization.Visualizers;
@@ -9,24 +10,24 @@ namespace TagsCloudVisualization;
 [SupportedOSPlatform("windows")]
 public static class Program
 {
-    private const int ImageWidth = 1600;
-    private const int ImageHeight = 1600;
-    private const int CountRectangles = 1000;
-    private const int MinLength = 10;
-    private const int MaxLength = 20;
+    private const int CountRectangles = 100;
+    private const int MinLength = 30;
+    private const int MaxLength = 80;
     
     public static void Main()
     {
-        var center = new Point(ImageWidth / 2, ImageHeight / 2);
-        var cloudLayouter = new CircularCloudLayouter(center, 1, 0.5);
+        var cloudLayouter = new CircularCloudLayouter(new Point(), 1, 0.1);
         var random = new Random();
         var rectangles = Enumerable
             .Range(0, CountRectangles)
             .Select(x => random.NextSize(MinLength, MaxLength))
-            .Select(size => cloudLayouter.PutNextRectangle(size));
+            .Select(size => cloudLayouter.PutNextRectangle(size))
+            .ToList();
 
-        var visualizer = new DefaultVisualizer();
-        var bitmap = visualizer.CreateBitmap(rectangles, new Size(ImageWidth, ImageHeight));
+        var rectanglesWindow = new RectanglesWindow(rectangles);
+        var center = new Point(rectanglesWindow.Width / 2, rectanglesWindow.Height / 2);
+        var visualizer = new DefaultVisualizer(center);
+        using var bitmap = visualizer.CreateBitmap(rectangles, new Size(rectanglesWindow.Width, rectanglesWindow.Height));
         var path = GetPathToTagsCloudImage();
 
         bitmap.Save(path);
