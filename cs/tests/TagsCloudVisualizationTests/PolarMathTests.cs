@@ -1,4 +1,5 @@
 using System.Drawing;
+using FluentAssertions;
 using NUnit.Framework;
 using TagsCloudVisualization.Base;
 
@@ -29,6 +30,11 @@ public class PolarMathTests
     public double ConvertToDegrees_ShouldReturnExpectedResult(double radians) => 
         Math.Round(PolarMath.ConvertToDegrees(radians));
 
+    [TestCase(0, ExpectedResult = 0, TestName = "RadiusEqualZero")]
+    [TestCase(5, ExpectedResult = 5 * 5 * Math.PI, TestName = "RadiusEqualGreaterThanZero")]
+    public double GetSquareOfCircle_ShouldReturnExpectedResult(double radius) => 
+        PolarMath.GetSquareOfCircle(radius);
+    
     [TestCase( 0.5 * Math.PI, ExpectedResult = 0.25, TestName = "RadiusEqualHalfOfPi")]
     [TestCase(Math.PI, ExpectedResult = 0.5, TestName = "RadiusEqualPi")]
     [TestCase(1.5 * Math.PI, ExpectedResult = 0.75, TestName = "RadiusEqualOneAndHalfPi")]
