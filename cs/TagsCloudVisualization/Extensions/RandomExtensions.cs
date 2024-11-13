@@ -14,4 +14,7 @@ public static class RandomExtensions
         
         return new Size(width, height);
     }
+    
+    public static Point NextPoint(this Random random, int minPos, int maxPos) => 
+        new(random.Next(minPos, maxPos), random.Next(minPos, maxPos));
 }
