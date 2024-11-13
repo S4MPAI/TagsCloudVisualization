@@ -35,6 +35,20 @@ public class RandomExtensionsTests
         
         actualSize.Should().BeEquivalentTo(expectedSize);
     }
+    
+    [Test]
+    [Repeat(10)]
+    public void NextPoint_ShouldReturnExpectedRandomPoint()
+    {
+        var seed = this.random.Next();
+        var random = new Random(seed);
+        var checkRandom = new Random(seed);
+        
+        var actualSize = random.NextPoint(1, int.MaxValue);
+        var expectedSize = new Point(GetRandomInt(checkRandom), GetRandomInt(checkRandom));
+        
+        actualSize.Should().BeEquivalentTo(expectedSize);
+    }
 
     private int GetRandomInt(Random random) => random.Next(1, int.MaxValue);
 }
