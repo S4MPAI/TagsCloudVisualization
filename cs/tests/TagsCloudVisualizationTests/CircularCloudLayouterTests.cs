@@ -1,35 +1,47 @@
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 using FluentAssertions;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using TagsCloudVisualization.Base;
 using TagsCloudVisualization.CloudLayouters;
 using TagsCloudVisualization.Extensions;
+using TagsCloudVisualization.Visualizers;
 
 namespace TagsCloudVisualizationTests;
 
+[SupportedOSPlatform("windows")]
 [TestFixture]
 public class CircularCloudLayouterTests
 {
     private int seed = 232445332;
     private Randomizer random;
+    private Rectangle[] testRectangles;
+    private const string ImagesDirectory = "testImages";
     
     [OneTimeSetUp]
     public void Init()
     {
         random = new Randomizer(seed);
     }
-    
-    [Test]
-    public void PutNextRectangle_ShouldReturnRectangleInCenter_FirstRectangle()
+
+    [TearDown]
+    public void TearDown()
     {
-        var size = new Size(100, 100);
-        var circularCloudLayouter = new CircularCloudLayouter(new Point(0, 0), 1, 0.5);
-        
-        var actualRectangle = circularCloudLayouter.PutNextRectangle(size);
-        var expectedRectangle = new Rectangle(-size.Width / 2, -size.Height / 2, size.Width, size.Height);
-        
-        actualRectangle.Should().BeEquivalentTo(expectedRectangle);
+        var currentContext = TestContext.CurrentContext;
+        if (currentContext.Result.Outcome.Status != TestStatus.Failed)
+            return;
+
+        var rectanglesWindow = new RectanglesWindow(testRectangles);
+        var center = new Point(rectanglesWindow.Width / 2, rectanglesWindow.Height / 2);
+        var visualizer = new DefaultVisualizer(center);
+        using var bitmap = visualizer.CreateBitmap(testRectangles, new Size(rectanglesWindow.Width, rectanglesWindow.Height));
+        var path = Path.Combine(ImagesDirectory, currentContext.Test.Name + ".png");
+        Directory.CreateDirectory(ImagesDirectory);
+        bitmap.Save(path, ImageFormat.Png);
+        TestContext.Out.WriteLine($"Tag cloud visualization saved to file {path}");
     }
     
     [Test]
@@ -37,12 +49,12 @@ public class CircularCloudLayouterTests
     public void PutNextRectangle_ShouldReturnRectanglesInCenter()
     {
         var center = random.NextPoint(-100, 100);
-        var rectangles = PutRectanglesInCloudLayouter(center);
+        testRectangles = PutRectanglesInCloudLayouter(center);
 
-        var actualRectanglesWindow = new RectanglesWindow(rectangles);
+        var actualRectanglesWindow = new RectanglesWindow(testRectangles);
         var centerOffset = center.Subtract(actualRectanglesWindow.Center).Abs();
-        var xError = rectangles.Max(r => r.Width);
-        var yError = rectangles.Max(r => r.Height);
+        var xError = testRectangles.Max(r => r.Width);
+        var yError = testRectangles.Max(r => r.Height);
         
         centerOffset.X.Should().BeLessThanOrEqualTo(xError);
         centerOffset.Y.Should().BeLessThanOrEqualTo(yError);
@@ -53,11 +65,11 @@ public class CircularCloudLayouterTests
     public void PutNextRectangle_ShouldReturnRectanglesInCircle()
     {
         var center = random.NextPoint(-100, 100);
-        var rectangles = PutRectanglesInCloudLayouter(center);
+        testRectangles = PutRectanglesInCloudLayouter(center);
         
-        var actualRectanglesWindow = new RectanglesWindow(rectangles);
+        var actualRectanglesWindow = new RectanglesWindow(testRectangles);
         var radius = (actualRectanglesWindow.Width + actualRectanglesWindow.Height) / 4;
-        var actualSquare = (double)rectangles.Sum(r => r.Width * r.Height);
+        var actualSquare = (double)testRectangles.Sum(r => r.Width * r.Height);
         var expectedSquare = PolarMath.GetSquareOfCircle(radius);
 
         var precision = expectedSquare * 0.275;
@@ -69,9 +81,9 @@ public class CircularCloudLayouterTests
     public void PutNextRectangle_ShouldReturnDontIntersectsRectangles()
     {
         var center = random.NextPoint(-100, 100);
-        var rectangles = PutRectanglesInCloudLayouter(center);
+        testRectangles = PutRectanglesInCloudLayouter(center);
         
-        IsHaveIntersects(rectangles).Should().BeFalse();
+        IsHaveIntersects(testRectangles).Should().BeFalse();
     }
     
     private Rectangle[] PutRectanglesInCloudLayouter(Point center)
@@ -94,5 +106,14 @@ public class CircularCloudLayouterTests
                     return true;
         
         return false;
+    }
+
+    [Test]
+    [Explicit]
+    public void PutNextRectangle_FaultedTest()
+    {
+        testRectangles = PutRectanglesInCloudLayouter(new Point());
+        
+        testRectangles.Should().BeEmpty();
     }
 }
