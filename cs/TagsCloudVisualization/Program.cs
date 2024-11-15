@@ -7,7 +7,6 @@ using TagsCloudVisualization.Visualizers;
 
 namespace TagsCloudVisualization;
 
-[SupportedOSPlatform("windows")]
 public static class Program
 {
     private const int CountRectangles = 100;

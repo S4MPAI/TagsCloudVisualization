@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.Versioning;
 using FluentAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -12,7 +11,6 @@ using TagsCloudVisualization.Visualizers;
 
 namespace TagsCloudVisualizationTests;
 
-[SupportedOSPlatform("windows")]
 [TestFixture]
 public class CircularCloudLayouterTests
 {
