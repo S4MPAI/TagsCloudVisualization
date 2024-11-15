@@ -13,6 +13,12 @@ public static class PolarMath
     public static double GetSquareOfCircle(double radius) => 
         Math.PI * radius * radius;
     
+    public static int GetSectorOfCircleFromRadians(double radians) 
+        => (int)((radians % Math.Tau) / (Math.PI / 2) + 1);
+    
+    public static int GetSectorOfCircleFromDegrees(double degrees) 
+        => (int)((degrees % 360) / 90 + 1);
+    
     public static double GetOffsetPerRadianForArchimedeanSpiral(double radius) =>
         radius / (2 * Math.PI);
 
