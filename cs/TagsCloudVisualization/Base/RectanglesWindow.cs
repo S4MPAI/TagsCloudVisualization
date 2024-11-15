@@ -4,7 +4,7 @@ namespace TagsCloudVisualization.Base;
 
 public class RectanglesWindow
 {
-    public Point Position { get; private set; } = new(int.MaxValue, int.MaxValue);
+    private Point Position { get; set; } = new(int.MaxValue, int.MaxValue);
     public int Width => end.X - Position.X;
     public int Height => end.Y - Position.Y;
     public Point Center => new(Position.X + Width / 2, Position.Y + Height / 2);
