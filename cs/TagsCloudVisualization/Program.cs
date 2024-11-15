@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Runtime.Versioning;
 using TagsCloudVisualization.Base;
 using TagsCloudVisualization.CloudLayouters;
 using TagsCloudVisualization.Extensions;
@@ -9,9 +8,9 @@ namespace TagsCloudVisualization;
 
 public static class Program
 {
-    private const int CountRectangles = 100;
-    private const int MinLength = 30;
-    private const int MaxLength = 80;
+    private const int CountRectangles = 500;
+    private const int MinLength = 15;
+    private const int MaxLength = 30;
     private const string ImagesDirectory = "images";
     private static readonly Random Random = new();
     
