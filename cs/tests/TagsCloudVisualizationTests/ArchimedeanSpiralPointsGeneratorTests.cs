@@ -7,6 +7,7 @@ using TagsCloudVisualization.PointsGenerators;
 namespace TagsCloudVisualizationTests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class ArchimedeanSpiralPointsGeneratorTests
 {
     private const int Seed = 875556434;

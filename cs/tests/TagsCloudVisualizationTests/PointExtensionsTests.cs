@@ -5,6 +5,7 @@ using TagsCloudVisualization.Extensions;
 namespace TagsCloudVisualizationTests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class PointExtensionsTests
 {
     [TestCaseSource(nameof(_subtractTestCases))]
@@ -18,7 +19,7 @@ public class PointExtensionsTests
     };
 
     [TestCaseSource(nameof(_absTestCases))]
-    public Point Subtract_ShouldReturnExpectedPoint(Point point) =>
+    public Point Abs_ShouldReturnExpectedPoint(Point point) =>
         point.Abs();
 
     private static TestCaseData[] _absTestCases =

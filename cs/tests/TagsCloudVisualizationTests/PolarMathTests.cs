@@ -6,6 +6,7 @@ using TagsCloudVisualization.Base;
 namespace TagsCloudVisualizationTests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class PolarMathTests
 {
     [TestCase(0, ExpectedResult = 0, TestName = "DegreesEqualZero")]

@@ -6,6 +6,7 @@ using TagsCloudVisualization.Extensions;
 namespace TagsCloudVisualizationTests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class RandomExtensionsTests
 {
     private const int Seed = 43435534;
@@ -50,5 +51,5 @@ public class RandomExtensionsTests
         actualSize.Should().BeEquivalentTo(expectedSize);
     }
 
-    private int GetRandomInt(Random random) => random.Next(1, int.MaxValue);
+    private static int GetRandomInt(Random random) => random.Next(1, int.MaxValue);
 }

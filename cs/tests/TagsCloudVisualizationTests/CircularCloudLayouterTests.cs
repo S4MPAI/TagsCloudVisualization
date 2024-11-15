@@ -12,11 +12,13 @@ using TagsCloudVisualization.Visualizers;
 namespace TagsCloudVisualizationTests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class CircularCloudLayouterTests
 {
     private const int Seed = 232445332;
     private readonly Randomizer random = new(Seed);
-    private Rectangle[] testRectangles;
+    private Rectangle[] testRectangles = null!;
     private const string ImagesDirectory = "testImages";
 
     [TearDown]
@@ -25,13 +27,15 @@ public class CircularCloudLayouterTests
         var currentContext = TestContext.CurrentContext;
         if (currentContext.Result.Outcome.Status != TestStatus.Failed)
             return;
-
+        
         var rectanglesWindow = new RectanglesWindow(testRectangles);
         var visualizer = new CartesianVisualizer(new Size(rectanglesWindow.Width, rectanglesWindow.Height));
         using var bitmap = visualizer.CreateBitmap(testRectangles);
+        
         var path = Path.Combine(ImagesDirectory, currentContext.Test.Name + ".png");
         Directory.CreateDirectory(ImagesDirectory);
         bitmap.Save(path, ImageFormat.Png);
+        
         TestContext.Out.WriteLine($"Tag cloud visualization saved to file {path}");
     }
     
@@ -63,7 +67,8 @@ public class CircularCloudLayouterTests
         var actualSquare = (double)testRectangles.Sum(r => r.Width * r.Height);
         var expectedSquare = PolarMath.GetSquareOfCircle(radius);
 
-        var precision = expectedSquare * 0.275;
+        const double allowableAreaFraction = 0.275;
+        var precision = expectedSquare * allowableAreaFraction;
         actualSquare.Should().BeApproximately(expectedSquare, precision);
     }
     
