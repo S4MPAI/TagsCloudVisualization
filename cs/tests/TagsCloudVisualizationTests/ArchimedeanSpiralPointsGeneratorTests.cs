@@ -13,12 +13,13 @@ public class ArchimedeanSpiralPointsGeneratorTests
     [TestCase(4, 0, TestName = "AngleOffsetEqualZero")]
     public void ShouldThrowArgumentException(double radius, double angleOffset)
     {
-        var pointsGeneratorConstructor = () => new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
+        var pointsGeneratorConstructor = 
+            () => new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
         
         pointsGeneratorConstructor.Should().Throw<ArgumentException>();
     }
     
-    [TestCase(1, 10)]
+    [TestCase(36, 10)]
     [TestCase(4, 90)]
     [TestCase(8, 45)]
     [TestCase(12, 30)]
@@ -36,18 +37,17 @@ public class ArchimedeanSpiralPointsGeneratorTests
     private static void AssertPointsGeneratingInSpiral(double radius, double angleOffset, IEnumerable<Point> actualPoints)
     {
         var angle = 0d;
-        var angleRadiansOffset = PolarMath.ConvertToRadians(angleOffset);
-        var (_, lastAngle) = PolarMath.ConvertToPolarCoordinateSystem(new Point());
         
         foreach (var actualPoint in actualPoints)
         {
             var expectedRadius = radius * angle / 360;
+            var expectedSector = PolarMath.GetSectorOfCircleFromDegrees(angle);
             var (actualRadius, actualAngle) = PolarMath.ConvertToPolarCoordinateSystem(actualPoint);
+            var actualSector = PolarMath.GetSectorOfCircleFromRadians(actualAngle);
             
             actualRadius.Should().BeApproximately(expectedRadius, 0.99);
-            actualAngle.Should().BeGreaterThanOrEqualTo(lastAngle);
+            actualSector.Should().Be(expectedSector);
             
-            lastAngle = actualAngle + angleRadiansOffset >= 2 * Math.PI ? 0 : lastAngle;
             angle += angleOffset;
         }
     }
