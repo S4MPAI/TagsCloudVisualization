@@ -36,6 +36,18 @@ public class PolarMathTests
     public double GetSquareOfCircle_ShouldReturnExpectedResult(double radius) => 
         PolarMath.GetSquareOfCircle(radius);
     
+    [TestCase(0, ExpectedResult = 1, TestName = "DegreesEqualZero")]
+    [TestCase(145, ExpectedResult = 2, TestName = "DegreesInSecondSector")]
+    [TestCase(375, ExpectedResult = 1, TestName = "DegreesInNextCircle")]
+    public double GetSectorOfCircleFromDegrees_ShouldReturnExpectedResult(int degrees) =>
+        PolarMath.GetSectorOfCircleFromDegrees(degrees);
+    
+    [TestCase(0, ExpectedResult = 1, TestName = "RadiansEqualZero")]
+    [TestCase(3 * Math.PI / 4, ExpectedResult = 2, TestName = "RadiansInSecondSector")]
+    [TestCase(9 * Math.PI / 4, ExpectedResult = 1, TestName = "RadiansInNextCircle")]
+    public double GetSectorOfCircleFromRadians_ShouldReturnExpectedResult(double radians) =>
+        PolarMath.GetSectorOfCircleFromRadians(radians);
+    
     [TestCase( 0.5 * Math.PI, ExpectedResult = 0.25, TestName = "RadiusEqualHalfOfPi")]
     [TestCase(Math.PI, ExpectedResult = 0.5, TestName = "RadiusEqualPi")]
     [TestCase(1.5 * Math.PI, ExpectedResult = 0.75, TestName = "RadiusEqualOneAndHalfPi")]
