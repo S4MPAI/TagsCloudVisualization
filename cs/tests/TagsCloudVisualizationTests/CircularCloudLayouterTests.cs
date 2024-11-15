@@ -14,16 +14,10 @@ namespace TagsCloudVisualizationTests;
 [TestFixture]
 public class CircularCloudLayouterTests
 {
-    private int seed = 232445332;
-    private Randomizer random;
+    private const int Seed = 232445332;
+    private readonly Randomizer random = new(Seed);
     private Rectangle[] testRectangles;
     private const string ImagesDirectory = "testImages";
-    
-    [OneTimeSetUp]
-    public void Init()
-    {
-        random = new Randomizer(seed);
-    }
 
     [TearDown]
     public void TearDown()
@@ -33,9 +27,8 @@ public class CircularCloudLayouterTests
             return;
 
         var rectanglesWindow = new RectanglesWindow(testRectangles);
-        var center = new Point(rectanglesWindow.Width / 2, rectanglesWindow.Height / 2);
-        var visualizer = new DefaultVisualizer(center);
-        using var bitmap = visualizer.CreateBitmap(testRectangles, new Size(rectanglesWindow.Width, rectanglesWindow.Height));
+        var visualizer = new CartesianVisualizer(new Size(rectanglesWindow.Width, rectanglesWindow.Height));
+        using var bitmap = visualizer.CreateBitmap(testRectangles);
         var path = Path.Combine(ImagesDirectory, currentContext.Test.Name + ".png");
         Directory.CreateDirectory(ImagesDirectory);
         bitmap.Save(path, ImageFormat.Png);
