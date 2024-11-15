@@ -67,8 +67,8 @@ public class CircularCloudLayouterTests
         var actualSquare = (double)testRectangles.Sum(r => r.Width * r.Height);
         var expectedSquare = PolarMath.GetSquareOfCircle(radius);
 
-        const double allowableAreaFraction = 0.275;
-        var precision = expectedSquare * allowableAreaFraction;
+        const double allowableSquareFraction = 0.275;
+        var precision = expectedSquare * allowableSquareFraction;
         actualSquare.Should().BeApproximately(expectedSquare, precision);
     }
     
