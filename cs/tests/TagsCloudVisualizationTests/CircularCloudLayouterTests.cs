@@ -103,13 +103,4 @@ public class CircularCloudLayouterTests
         
         return false;
     }
-
-    [Test]
-    [Explicit]
-    public void PutNextRectangle_FaultedTest()
-    {
-        testRectangles = PutRectanglesInCloudLayouter(new Point());
-        
-        testRectangles.Should().BeEmpty();
-    }
 }
