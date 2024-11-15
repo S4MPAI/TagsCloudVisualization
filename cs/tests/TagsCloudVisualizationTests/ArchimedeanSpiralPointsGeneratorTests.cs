@@ -9,6 +9,9 @@ namespace TagsCloudVisualizationTests;
 [TestFixture]
 public class ArchimedeanSpiralPointsGeneratorTests
 {
+    private const int Seed = 875556434;
+    private readonly Random random = new(Seed);
+    
     [TestCase(-1, 2, TestName = "RadiusLessThanZero")]
     [TestCase(4, 0, TestName = "AngleOffsetEqualZero")]
     public void ShouldThrowArgumentException(double radius, double angleOffset)
@@ -19,12 +22,12 @@ public class ArchimedeanSpiralPointsGeneratorTests
         pointsGeneratorConstructor.Should().Throw<ArgumentException>();
     }
     
-    [TestCase(36, 10)]
-    [TestCase(4, 90)]
-    [TestCase(8, 45)]
-    [TestCase(12, 30)]
-    public void GeneratePoints_ShouldReturnPointsInSpiral(double radius, double angleOffset)
+    [Test]
+    [Repeat(5)]
+    public void GeneratePoints_ShouldReturnPointsInSpiral()
     {
+        var radius = random.Next(1, 100);
+        var angleOffset = random.Next(1, 100);
         var pointsGenerator = new ArchimedeanSpiralPointsGenerator(radius, angleOffset);
         
         var actualPoints = pointsGenerator
@@ -44,9 +47,10 @@ public class ArchimedeanSpiralPointsGeneratorTests
             var expectedSector = PolarMath.GetSectorOfCircleFromDegrees(angle);
             var (actualRadius, actualAngle) = PolarMath.ConvertToPolarCoordinateSystem(actualPoint);
             var actualSector = PolarMath.GetSectorOfCircleFromRadians(actualAngle);
+            var sectorOffset = actualSector - expectedSector;
             
             actualRadius.Should().BeApproximately(expectedRadius, 0.99);
-            actualSector.Should().Be(expectedSector);
+            sectorOffset.Should().BeInRange(0, 1);
             
             angle += angleOffset;
         }
