@@ -2,26 +2,21 @@ using System.Drawing;
 
 namespace TagsCloudVisualization.Visualizers;
 
-[SupportedOSPlatform("windows")]
-public class DefaultVisualizer(Point offset) : IVisualizer
+public class CartesianVisualizer(Size bitmapSize) : IVisualizer
 {
     private const int MinColorComponentValue = 0;
     private const int MaxColorComponentValue = 255;
     private readonly Random random = new();
-
-    public DefaultVisualizer() : this(new Point())
-    {
-    }
+    private readonly Point centerOffset = new(bitmapSize.Width / 2, bitmapSize.Height / 2);
     
-    public Bitmap CreateBitmap(IEnumerable<Rectangle> rectangles, Size bitmapSize)
+    public Bitmap CreateBitmap(IEnumerable<Rectangle> rectangles)
     {
         var bitmap = new Bitmap(bitmapSize.Width, bitmapSize.Height);
         using var graphics = Graphics.FromImage(bitmap);
         
-        graphics.FillRectangle(Brushes.Black, new Rectangle(new Point(), bitmapSize));
         foreach (var rectangle in rectangles)
         {
-            rectangle.Offset(offset);
+            rectangle.Offset(centerOffset);
             graphics.DrawRectangle(GetRandomPen(), rectangle);
         }
         
