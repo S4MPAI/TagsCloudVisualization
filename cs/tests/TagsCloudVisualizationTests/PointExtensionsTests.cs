@@ -1,4 +1,5 @@
 using System.Drawing;
+using FluentAssertions;
 using NUnit.Framework;
 using TagsCloudVisualization.Extensions;
 
@@ -8,23 +9,36 @@ namespace TagsCloudVisualizationTests;
 [Parallelizable(ParallelScope.Self)]
 public class PointExtensionsTests
 {
-    [TestCaseSource(nameof(_subtractTestCases))]
-    public Point Subtract_ShouldReturnExpectedPoint(Point point1, Point point2) =>
-        point1.Subtract(point2);
-
-    private static TestCaseData[] _subtractTestCases =
+    private const int MinIntValue = -100;
+    private const int MaxIntValue = 100;
+    private const int Seed = 23478932;
+    private readonly Random random = new(Seed);
+    
+    [Test]
+    [Repeat(10)]
+    public void Subtract_ShouldReturnExpectedPoint()
     {
-        new TestCaseData(new Point(5, 3), new Point(2, 3)).Returns(new Point(3, 0)).SetName("ExpectedPointPositive"),
-        new TestCaseData(new Point(5, 3), new Point(9, 7)).Returns(new Point(-4, -4)).SetName("ExpectedPointNegative")
-    };
+        var point1 = GetRandomPoint();
+        var point2 = GetRandomPoint();
+        
+        var actualPoint = point1.Subtract(point2);
+        var expectedPoint = new Point(point1.X - point2.X, point1.Y - point2.Y);
+        
+        actualPoint.Should().BeEquivalentTo(expectedPoint);
+    }
 
-    [TestCaseSource(nameof(_absTestCases))]
-    public Point Abs_ShouldReturnExpectedPoint(Point point) =>
-        point.Abs();
-
-    private static TestCaseData[] _absTestCases =
+    [Test]
+    [Repeat(10)]
+    public void Abs_ShouldReturnExpectedPoint()
     {
-        new TestCaseData(new Point(5, 3)).Returns(new Point(5, 3)).SetName("PointPositive"),
-        new TestCaseData(new Point(-6, -7)).Returns(new Point(6, 7)).SetName("PointNegative")
-    };
+        var point = GetRandomPoint();
+        
+        var actualPoint = point.Abs();
+        var expectedPoint = new Point(Math.Abs(point.X), Math.Abs(point.Y));
+        
+        actualPoint.Should().BeEquivalentTo(expectedPoint);
+    }
+
+    private Point GetRandomPoint() => 
+        random.NextPoint(MinIntValue, MaxIntValue);
 }
