@@ -4,12 +4,12 @@ namespace TagsCloudVisualization.Base;
 
 public class RectanglesWindow
 {
-    private Point Position { get; set; } = new(int.MaxValue, int.MaxValue);
-    public int Width => end.X - Position.X;
-    public int Height => end.Y - Position.Y;
-    public Point Center => new(Position.X + Width / 2, Position.Y + Height / 2);
+    public int Width => end.X - position.X;
+    public int Height => end.Y - position.Y;
+    public Point Center => new(position.X + Width / 2, position.Y + Height / 2);
     private Point end = new(int.MinValue, int.MinValue);
-
+    private Point position = new(int.MaxValue, int.MaxValue);
+    
     public RectanglesWindow(IEnumerable<Rectangle> rectangles)
     {
         PutRectangles(rectangles);
@@ -23,10 +23,10 @@ public class RectanglesWindow
 
     private void PutRectangle(Rectangle rectangle)
     {
-        Position = new Point
+        position = new Point
         {
-            X = Math.Min(rectangle.Left, Position.X),
-            Y = Math.Min(rectangle.Top, Position.Y)
+            X = Math.Min(rectangle.Left, position.X),
+            Y = Math.Min(rectangle.Top, position.Y)
         };
         
         end.X = Math.Max(rectangle.Right, end.X);
