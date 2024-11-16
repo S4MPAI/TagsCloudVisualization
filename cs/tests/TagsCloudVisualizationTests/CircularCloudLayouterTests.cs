@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -17,7 +18,7 @@ namespace TagsCloudVisualizationTests;
 public class CircularCloudLayouterTests
 {
     private const int Seed = 232445332;
-    private readonly Randomizer random = new(Seed);
+    private static readonly Randomizer Random = new(Seed);
     private Rectangle[] testRectangles = null!;
     private const string ImagesDirectory = "testImages";
 
@@ -43,23 +44,26 @@ public class CircularCloudLayouterTests
     [Repeat(10)]
     public void PutNextRectangle_ShouldReturnRectanglesInCenter()
     {
-        var center = random.NextPoint(-100, 100);
+        var center = Random.NextPoint(-100, 100);
         testRectangles = PutRectanglesInCloudLayouter(center);
 
         var actualRectanglesWindow = new RectanglesWindow(testRectangles);
         var centerOffset = center.Subtract(actualRectanglesWindow.Center).Abs();
         var xError = testRectangles.Max(r => r.Width);
         var yError = testRectangles.Max(r => r.Height);
-        
-        centerOffset.X.Should().BeLessThanOrEqualTo(xError);
-        centerOffset.Y.Should().BeLessThanOrEqualTo(yError);
+
+        using (new AssertionScope())
+        {
+            centerOffset.X.Should().BeLessThanOrEqualTo(xError);
+            centerOffset.Y.Should().BeLessThanOrEqualTo(yError);
+        }
     }
     
     [Test]
     [Repeat(10)]
     public void PutNextRectangle_ShouldReturnRectanglesInCircle()
     {
-        var center = random.NextPoint(-100, 100);
+        var center = Random.NextPoint(-100, 100);
         testRectangles = PutRectanglesInCloudLayouter(center);
         
         var actualRectanglesWindow = new RectanglesWindow(testRectangles);
@@ -76,20 +80,20 @@ public class CircularCloudLayouterTests
     [Repeat(10)]
     public void PutNextRectangle_ShouldReturnDontIntersectsRectangles()
     {
-        var center = random.NextPoint(-100, 100);
+        var center = Random.NextPoint(-100, 100);
         testRectangles = PutRectanglesInCloudLayouter(center);
         
         IsHaveIntersects(testRectangles).Should().BeFalse();
     }
     
-    private Rectangle[] PutRectanglesInCloudLayouter(Point center)
+    private static Rectangle[] PutRectanglesInCloudLayouter(Point center)
     {
-        var rectanglesCount = random.Next(100, 500);
+        var rectanglesCount = Random.Next(100, 500);
         var circularCloudLayouter = new CircularCloudLayouter(center, 1, 0.5);
 
         return Enumerable
             .Range(0, rectanglesCount)
-            .Select(_ => random.NextSize(10, 50))
+            .Select(_ => Random.NextSize(10, 50))
             .Select(s => circularCloudLayouter.PutNextRectangle(s))
             .ToArray();
     }
